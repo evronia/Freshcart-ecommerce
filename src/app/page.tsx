@@ -1,69 +1,70 @@
-import Image from "next/image";
+import { getProducts } from "@/api/products.api"
+import SingleProduct from "./_components/singleProduct/SingleProduct";
+import { Iproducts } from "@/interfaces/products";
+import { MySlider } from "./_components/myslider/MySlider";
+import FeaturesItem from "./_components/featuresitems/FeaturesItem";
+import { PiVanFill } from "react-icons/pi";
+import { FaRotateLeft } from "react-icons/fa6";
+import { FaHeadset, FaShieldAlt } from "react-icons/fa";
+import CategorySection from "./_components/categorySection/CategorySection";
+import CategoryTitle from "./_components/categorySection/CategoryTitle";
+import PromoCards from "./_components/promoCards/PromoCards";
+import NewsletterSection from "./_components/newsletter/NewsletterSection";
 
-export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+export default async function Home() {
+
+  const data = await getProducts()
+  return <>
+
+    <MySlider />
+
+    <div className="bg-gray-100 py-10">
+      <div className="container mx-auto grid lg:grid-cols-4  md:grid-cols-2 sm:grid-cols-1 gap-2  py-3   ">
+        <div className="rounded-xl  shadow-lg shadow-gray-300 bg-white px-1 py-2 ">
+          <FeaturesItem Icon={PiVanFill} iconColor="text-[#2B7FFF]" title="Free Shipping" subtitle="On orders over 500 EGP" iconBg="bg-[#FEF2F2]" />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="rounded-xl shadow-lg shadow-gray-300  bg-white px-1 py-2">
+          <FeaturesItem Icon={FaShieldAlt} iconColor="text-[#16a34a]" title="Easy Returns" subtitle="14-day return policy" iconBg="bg-[#ECFDF5]" />
         </div>
-      </main>
+        <div className="rounded-xl shadow-lg shadow-gray-300  bg-white px-1 py-2 ">
+          <FeaturesItem Icon={FaRotateLeft} iconColor="text-[#FF6900]" title="Secure Payment" subtitle="100% secure checkout" iconBg="bg-[#F3F4F6]" />
+        </div>
+        <div className="rounded-xl shadow-lg shadow-gray-300   bg-white px-1 py-2 ">
+          <FeaturesItem Icon={FaHeadset} iconColor="text-[#AD46FF]" title="24/7 Support" subtitle="Contact us anytime" iconBg="bg-[#F9FAFB]" />
+        </div>
+      </div>
+
+
     </div>
-  );
+    <main className='container w-[90%] mx-auto'>
+      <CategoryTitle />
+      <CategorySection />
+      <PromoCards />
+      <div className="flex justify-between items-center  mt-10">
+        <div className='relative'>
+          <h2 className="text-3xl font-bold rounded-2xl  ml-6 before:content-[''] before:absolute before:left-3 before:top-0 before:w-2 before:h-9 before:bg-green-700 px-2 before:rounded-t-3xl before:rounded-b-3xl ">Featured<span className="text-green-700 ml-2">Products</span></h2>
+        </div>
+
+
+
+      </div>
+      <div className=" grid gap-5  md:grid-cols-4 lg:grid-cols-5  mt-5">
+
+
+        {
+          data.map((product: Iproducts) => {
+            return <SingleProduct key={product._id} product={product} />
+          })
+        }
+      </div>
+      <NewsletterSection />
+    </main>
+
+
+
+  </>
+
+
+
+
 }
