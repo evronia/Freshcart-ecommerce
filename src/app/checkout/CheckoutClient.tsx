@@ -85,12 +85,7 @@ export default function CheckoutClient({
       // Online payment
       if (paymentMethod === "online") {
         const { checkoutUrl } =
-          await createOnlineCheckoutSession(
-
-
-
-            `${window.location.origin}/my-orders`
-          );
+          await createOnlineCheckoutSession();
 
 
         if (saveAddress) {
@@ -156,60 +151,60 @@ export default function CheckoutClient({
     }
   }
 
-  async function handleOnlinePayment() {
-    setLoading(true);
+  // async function handleOnlinePayment() {
+  //   setLoading(true);
 
-    try {
-      // Replace these with your actual cart ID and auth token.
-      const cartId = "YOUR_CURRENT_CART_ID";
-      const token = "YOUR_AUTH_TOKEN";
+  //   try {
+  //     // Replace these with your actual cart ID and auth token.
+  //     const cartId = "YOUR_CURRENT_CART_ID";
+  //     const token = "YOUR_AUTH_TOKEN";
 
-      const baseUrl = window.location.origin;
+  //     const baseUrl = window.location.origin;
 
-      const response = await fetch(
-        `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=${encodeURIComponent(baseUrl)}`,
-        {
-          method: "GET",
-          headers: {
-            token,
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+  //     const response = await fetch(
+  //       `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}?url=${encodeURIComponent(baseUrl)}`,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           token,
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
 
-      const result = await response.json();
+  //     const result = await response.json();
 
-      console.log("Checkout session:", result);
+  //     console.log("Checkout session:", result);
 
-      if (!response.ok) {
-        throw new Error(
-          result.message ?? "Could not create checkout session."
-        );
-      }
+  //     if (!response.ok) {
+  //       throw new Error(
+  //         result.message ?? "Could not create checkout session."
+  //       );
+  //     }
 
-      // Inspect the response in DevTools to confirm the URL path.
-      const checkoutUrl =
-        result.session?.url ??
-        result.session?.session?.url ??
-        result.url;
+  //     // Inspect the response in DevTools to confirm the URL path.
+  //     const checkoutUrl =
+  //       result.session?.url ??
+  //       result.session?.session?.url ??
+  //       result.url;
 
-      if (!checkoutUrl) {
-        throw new Error(
-          "Checkout URL was not found in the API response."
-        );
-      }
+  //     if (!checkoutUrl) {
+  //       throw new Error(
+  //         "Checkout URL was not found in the API response."
+  //       );
+  //     }
 
-      window.location.assign(checkoutUrl);
-    } catch (error) {
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : "Payment failed to start."
-      );
-    } finally {
-      setLoading(false);
-    }
-  }
+  //     window.location.assign(checkoutUrl);
+  //   } catch (error) {
+  //     toast.error(
+  //       error instanceof Error
+  //         ? error.message
+  //         : "Payment failed to start."
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
 
   if (items.length === 0) {
@@ -418,11 +413,9 @@ export default function CheckoutClient({
                     </span>
                   </span>
                 </label>
-
                 {paymentMethod === "online" && (
-                  <p className="rounded-lg bg-amber-50 p-3 text-sm text-amber-800">
-                    Online payment must be connected to your payment
-                    provider before an order can be submitted.
+                  <p className="rounded-lg bg-green-50 p-3 text-sm text-green-800">
+                    You will be redirected to Stripe to complete your secure payment.
                   </p>
                 )}
               </div>
